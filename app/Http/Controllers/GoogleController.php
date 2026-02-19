@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Exception;
 
@@ -28,13 +30,14 @@ class GoogleController extends Controller
                 $newUser = User::updateOrCreate(['email' => $user->email],[
                     'name' => $user->name,
                     'google_id'=> $user->id,
-                    'password' => encrypt('123456dummy') // Password dummy
+                    'password' => Hash::make('123456dummy') // Password dummy
                 ]);
                 
                 Auth::login($newUser);
                 return redirect()->intended('dashboard');
             }
         } catch (Exception $e) {
+            Log::error('Google Login Error: ' . $e->getMessage());
             return redirect('login')->with('error', 'Gagal login dengan Google');
         }
     }
