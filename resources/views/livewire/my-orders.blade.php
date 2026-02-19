@@ -29,11 +29,15 @@
                         <div class="flex-1">
                              <p class="text-sm text-charcoal/80 mb-2 font-medium">Items:</p>
                              <ul class="text-sm text-charcoal/60 space-y-1">
-                                @foreach($order->items->take(2) as $item)
-                                    <li>{{ $item->quantity }}x {{ $item->product_name }} ({{ $item->size_name }}, {{ $item->color_name }})</li>
+                                @foreach($order->items as $item)
+                                    @if($loop->index < 2)
+                                        <li class="py-1">{{ $item->quantity }}x {{ $item->product_name }} ({{ $item->size_name }}, {{ $item->color_name }})</li>
+                                    @else
+                                        @break
+                                    @endif
                                 @endforeach
                                 @if($order->items->count() > 2)
-                                    <li class="italic text-xs">+{{ $order->items->count() - 2 }} more items...</li>
+                                    <li class="text-xs text-charcoal/40 italic py-1">+{{ $order->items->count() - 2 }} more items...</li>
                                 @endif
                              </ul>
                         </div>
