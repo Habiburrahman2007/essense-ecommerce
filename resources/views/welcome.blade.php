@@ -160,33 +160,18 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Shirts -->
-                <div class="group cursor-pointer overflow-hidden relative aspect-[4/5] bg-cream rounded-2xl shadow-sm">
-                    <img src="{{ asset('assets/images/shirt.jpeg') }}" alt="Organic Shirts" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
-                    <div class="absolute inset-0 flex flex-col justify-end p-8 z-10">
-                        <h3 class="text-2xl font-serif mb-2 text-white">Shirts</h3>
-                        <p class="text-sm tracking-widest uppercase text-white/80 opacity-0 group-hover:opacity-100 transition-all duration-500">Discover</p>
-                    </div>
-                </div>
-                <!-- Outers -->
-                <div class="group cursor-pointer overflow-hidden relative aspect-[4/5] bg-cream rounded-2xl shadow-sm">
-                    <img src="{{ asset('assets/images/outer.jpeg') }}" alt="Structured Outers" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
-                    <div class="absolute inset-0 flex flex-col justify-end p-8 z-10">
-                        <h3 class="text-2xl font-serif mb-2 text-white">Outers</h3>
-                        <p class="text-sm tracking-widest uppercase text-white/80 opacity-0 group-hover:opacity-100 transition-all duration-500">Discover</p>
-                    </div>
-                </div>
-                <!-- Pants -->
-                <div class="group cursor-pointer overflow-hidden relative aspect-[4/5] bg-cream rounded-2xl shadow-sm">
-                    <img src="{{ asset('assets/images/pants.jpeg') }}" alt="Tailored Pants" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
-                    <div class="absolute inset-0 flex flex-col justify-end p-8 z-10">
-                        <h3 class="text-2xl font-serif mb-2 text-white">Pants</h3>
-                        <p class="text-sm tracking-widest uppercase text-white/80 opacity-0 group-hover:opacity-100 transition-all duration-500">Discover</p>
-                    </div>
-                </div>
+                @foreach($categories as $category)
+                    <a href="{{ route('dashboard', ['activeCategory' => $category->name]) }}" class="group cursor-pointer overflow-hidden relative aspect-[4/5] bg-cream rounded-2xl shadow-sm block">
+                        <img src="{{ $category->display_image ? asset('storage/' . $category->display_image) : asset('assets/images/shirt.jpeg') }}" 
+                             alt="{{ $category->name }}" 
+                             class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                        <div class="absolute inset-0 flex flex-col justify-end p-8 z-10">
+                            <h3 class="text-2xl font-serif mb-2 text-white">{{ $category->name }}</h3>
+                            <p class="text-sm tracking-widest uppercase text-white/80 opacity-0 group-hover:opacity-100 transition-all duration-500">Discover</p>
+                        </div>
+                    </a>
+                @endforeach
             </div>
         </div>
     </section>
@@ -203,122 +188,56 @@
             <div class="flex gap-8 animate-scroll hover:pause-scroll w-max px-4">
                 <!-- Original Items -->
                 <div class="flex gap-8">
-                    <!-- Product 1 -->
+                    @foreach($products as $product)
                     <div class="w-72 flex-shrink-0">
-                        <div class="aspect-square bg-sand rounded-xl overflow-hidden mb-6 relative group/card">
-                            <img src="{{ asset('assets/images/prod_tshirt.png') }}" alt="Core T-Shirt" class="w-full h-full object-contain p-8 group-hover/card:scale-105 transition-transform duration-500">
-                            <button class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white text-charcoal px-6 py-2 rounded-full text-xs font-medium opacity-0 group-hover/card:opacity-100 transition-all shadow-sm whitespace-nowrap">Add to Bag</button>
-                        </div>
-                        <div class="flex justify-between items-start">
-                            <div class="text-left">
-                                <h4 class="text-charcoal font-medium text-sm">Heavy Cotton Tee</h4>
-                                <p class="text-charcoal/40 text-[10px] tracking-widest uppercase">Off-White</p>
+                        <a href="{{ route('product.detail', $product->slug) }}" class="block">
+                            <div class="aspect-square bg-sand rounded-xl overflow-hidden mb-6 relative group/card">
+                                @php
+                                    $image = $product->primaryImage->image_url ?? ($product->images->first()->image_url ?? null);
+                                    $imageUrl = $image && Storage::exists('public/' . $image) 
+                                        ? asset('storage/' . $image) 
+                                        : asset('assets/images/prod_tshirt.png');
+                                @endphp
+                                <img src="{{ $imageUrl }}" alt="{{ $product->name }}" class="w-full h-full object-contain p-8 group-hover/card:scale-105 transition-transform duration-500">
+                                <button class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white text-charcoal px-6 py-2 rounded-full text-xs font-medium opacity-0 group-hover/card:opacity-100 transition-all shadow-sm whitespace-nowrap hover:bg-clay hover:text-white">View Product</button>
                             </div>
-                            <span class="text-sm font-medium">$45.00</span>
-                        </div>
-                    </div>
-                    <!-- Product 2 -->
-                    <div class="w-72 flex-shrink-0">
-                        <div class="aspect-square bg-sand rounded-xl overflow-hidden mb-6 relative group/card">
-                            <img src="{{ asset('assets/images/prod_linen.png') }}" alt="Linen Shirt" class="w-full h-full object-contain p-8 group-hover/card:scale-105 transition-transform duration-500">
-                            <button class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white text-charcoal px-6 py-2 rounded-full text-xs font-medium opacity-0 group-hover/card:opacity-100 transition-all shadow-sm whitespace-nowrap">Add to Bag</button>
-                        </div>
-                        <div class="flex justify-between items-start">
-                            <div class="text-left">
-                                <h4 class="text-charcoal font-medium text-sm">Relaxed Linen Shirt</h4>
-                                <p class="text-charcoal/40 text-[10px] tracking-widest uppercase">Mist Grey</p>
+                            <div class="flex justify-between items-start">
+                                <div class="text-left">
+                                    <h4 class="text-charcoal font-medium text-sm line-clamp-1">{{ $product->name }}</h4>
+                                    <p class="text-charcoal/40 text-[10px] tracking-widest uppercase">{{ $product->category->name ?? 'Basic' }}</p>
+                                </div>
+                                <span class="text-sm font-medium">Rp {{ number_format($product->base_price, 0, ',', '.') }}</span>
                             </div>
-                            <span class="text-sm font-medium">$85.00</span>
-                        </div>
+                        </a>
                     </div>
-                    <!-- Product 3 -->
-                    <div class="w-72 flex-shrink-0">
-                        <div class="aspect-square bg-sand rounded-xl overflow-hidden mb-6 relative group/card">
-                            <img src="{{ asset('assets/images/prod_knit.png') }}" alt="Knit Sweater" class="w-full h-full object-contain p-8 group-hover/card:scale-105 transition-transform duration-500">
-                            <button class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white text-charcoal px-6 py-2 rounded-full text-xs font-medium opacity-0 group-hover/card:opacity-100 transition-all shadow-sm whitespace-nowrap">Add to Bag</button>
-                        </div>
-                        <div class="flex justify-between items-start">
-                            <div class="text-left">
-                                <h4 class="text-charcoal font-medium text-sm">Cashmere Blend Knit</h4>
-                                <p class="text-charcoal/40 text-[10px] tracking-widest uppercase">Beige</p>
-                            </div>
-                            <span class="text-sm font-medium">$120.00</span>
-                        </div>
-                    </div>
-                    <!-- Product 4 -->
-                    <div class="w-72 flex-shrink-0">
-                        <div class="aspect-square bg-sand rounded-xl overflow-hidden mb-6 relative group/card">
-                            <img src="{{ asset('assets/images/prod_tote.png') }}" alt="Canvas Tote" class="w-full h-full object-contain p-8 group-hover/card:scale-105 transition-transform duration-500">
-                            <button class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white text-charcoal px-6 py-2 rounded-full text-xs font-medium opacity-0 group-hover/card:opacity-100 transition-all shadow-sm whitespace-nowrap">Add to Bag</button>
-                        </div>
-                        <div class="flex justify-between items-start">
-                            <div class="text-left">
-                                <h4 class="text-charcoal font-medium text-sm">Minimal Canvas Tote</h4>
-                                <p class="text-charcoal/40 text-[10px] tracking-widest uppercase">Natural</p>
-                            </div>
-                            <span class="text-sm font-medium">$35.00</span>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
 
                 <!-- Cloned Items for Infinite effect -->
                 <div class="flex gap-8" aria-hidden="true">
-                    <!-- Product 1 (Clone) -->
+                    @foreach($products as $product)
                     <div class="w-72 flex-shrink-0">
-                        <div class="aspect-square bg-sand rounded-xl overflow-hidden mb-6 relative group/card">
-                            <img src="{{ asset('assets/images/prod_tshirt.png') }}" alt="Core T-Shirt" class="w-full h-full object-contain p-8 group-hover/card:scale-105 transition-transform duration-500">
-                            <button class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white text-charcoal px-6 py-2 rounded-full text-xs font-medium opacity-0 group-hover/card:opacity-100 transition-all shadow-sm whitespace-nowrap">Add to Bag</button>
-                        </div>
-                        <div class="flex justify-between items-start">
-                            <div class="text-left">
-                                <h4 class="text-charcoal font-medium text-sm">Heavy Cotton Tee</h4>
-                                <p class="text-charcoal/40 text-[10px] tracking-widest uppercase">Off-White</p>
+                        <a href="{{ route('product.detail', $product->slug) }}" class="block">
+                            <div class="aspect-square bg-sand rounded-xl overflow-hidden mb-6 relative group/card">
+                                @php
+                                    $image = $product->primaryImage->image_url ?? ($product->images->first()->image_url ?? null);
+                                    $imageUrl = $image && Storage::exists('public/' . $image) 
+                                        ? asset('storage/' . $image) 
+                                        : asset('assets/images/prod_tshirt.png');
+                                @endphp
+                                <img src="{{ $imageUrl }}" alt="{{ $product->name }}" class="w-full h-full object-contain p-8 group-hover/card:scale-105 transition-transform duration-500">
+                                <button class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white text-charcoal px-6 py-2 rounded-full text-xs font-medium opacity-0 group-hover/card:opacity-100 transition-all shadow-sm whitespace-nowrap hover:bg-clay hover:text-white">View Product</button>
                             </div>
-                            <span class="text-sm font-medium">$45.00</span>
-                        </div>
-                    </div>
-                    <!-- Product 2 (Clone) -->
-                    <div class="w-72 flex-shrink-0">
-                        <div class="aspect-square bg-sand rounded-xl overflow-hidden mb-6 relative group/card">
-                            <img src="{{ asset('assets/images/prod_linen.png') }}" alt="Linen Shirt" class="w-full h-full object-contain p-8 group-hover/card:scale-105 transition-transform duration-500">
-                            <button class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white text-charcoal px-6 py-2 rounded-full text-xs font-medium opacity-0 group-hover/card:opacity-100 transition-all shadow-sm whitespace-nowrap">Add to Bag</button>
-                        </div>
-                        <div class="flex justify-between items-start">
-                            <div class="text-left">
-                                <h4 class="text-charcoal font-medium text-sm">Relaxed Linen Shirt</h4>
-                                <p class="text-charcoal/40 text-[10px] tracking-widest uppercase">Mist Grey</p>
+                            <div class="flex justify-between items-start">
+                                <div class="text-left">
+                                    <h4 class="text-charcoal font-medium text-sm line-clamp-1">{{ $product->name }}</h4>
+                                    <p class="text-charcoal/40 text-[10px] tracking-widest uppercase">{{ $product->category->name ?? 'Basic' }}</p>
+                                </div>
+                                <span class="text-sm font-medium">Rp {{ number_format($product->base_price, 0, ',', '.') }}</span>
                             </div>
-                            <span class="text-sm font-medium">$85.00</span>
-                        </div>
+                        </a>
                     </div>
-                    <!-- Product 3 (Clone) -->
-                    <div class="w-72 flex-shrink-0">
-                        <div class="aspect-square bg-sand rounded-xl overflow-hidden mb-6 relative group/card">
-                            <img src="{{ asset('assets/images/prod_knit.png') }}" alt="Knit Sweater" class="w-full h-full object-contain p-8 group-hover/card:scale-105 transition-transform duration-500">
-                            <button class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white text-charcoal px-6 py-2 rounded-full text-xs font-medium opacity-0 group-hover/card:opacity-100 transition-all shadow-sm whitespace-nowrap">Add to Bag</button>
-                        </div>
-                        <div class="flex justify-between items-start">
-                            <div class="text-left">
-                                <h4 class="text-charcoal font-medium text-sm">Cashmere Blend Knit</h4>
-                                <p class="text-charcoal/40 text-[10px] tracking-widest uppercase">Beige</p>
-                            </div>
-                            <span class="text-sm font-medium">$120.00</span>
-                        </div>
-                    </div>
-                    <!-- Product 4 (Clone) -->
-                    <div class="w-72 flex-shrink-0">
-                        <div class="aspect-square bg-sand rounded-xl overflow-hidden mb-6 relative group/card">
-                            <img src="{{ asset('assets/images/prod_tote.png') }}" alt="Canvas Tote" class="w-full h-full object-contain p-8 group-hover/card:scale-105 transition-transform duration-500">
-                            <button class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white text-charcoal px-6 py-2 rounded-full text-xs font-medium opacity-0 group-hover/card:opacity-100 transition-all shadow-sm whitespace-nowrap">Add to Bag</button>
-                        </div>
-                        <div class="flex justify-between items-start">
-                            <div class="text-left">
-                                <h4 class="text-charcoal font-medium text-sm">Minimal Canvas Tote</h4>
-                                <p class="text-charcoal/40 text-[10px] tracking-widest uppercase">Natural</p>
-                            </div>
-                            <span class="text-sm font-medium">$35.00</span>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
