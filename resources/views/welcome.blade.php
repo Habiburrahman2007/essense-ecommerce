@@ -49,7 +49,7 @@
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
                         <div class="absolute inset-0 flex flex-col justify-end p-8 z-10">
                             <h3 class="text-2xl font-serif mb-2 text-white">{{ $category->name }}</h3>
-                            <p class="text-sm tracking-widest uppercase text-white/80 opacity-0 group-hover:opacity-100 transition-all duration-500">Discover</p>
+                            <p class="text-sm tracking-widest uppercase text-white/80 opacity-0 group-hover:opacity-100 transition-all duration-500">{{ $category->children->pluck('name')->join(' | ') }}</p>
                         </div>
                     </a>
                 @endforeach
