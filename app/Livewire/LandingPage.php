@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 
 class LandingPage extends Component
 {
+    #[\Livewire\Attributes\Layout('layouts.landing')] 
     public function render()
     {
         // 1. Get Parent Categories and determine their image
