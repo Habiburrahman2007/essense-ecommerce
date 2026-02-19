@@ -72,14 +72,14 @@
                     @foreach($products as $product)
                     <div class="w-72 flex-shrink-0">
                         <a href="{{ route('product.detail', $product->slug) }}" class="block">
-                            <div class="aspect-square bg-sand rounded-xl overflow-hidden mb-6 relative group/card">
+                            <div class="aspect-square bg-sand rounded-md overflow-hidden mb-6 relative group/card">
                                 @php
                                     $image = $product->primaryImage->image_url ?? ($product->images->first()->image_url ?? null);
                                     $imageUrl = $image && Storage::disk('public')->exists($image) 
                                         ? asset('storage/' . $image) 
                                         : asset('assets/images/prod_tshirt.png');
                                 @endphp
-                                <img src="{{ $imageUrl }}" alt="{{ $product->name }}" class="w-full h-full object-contain p-8 group-hover/card:scale-105 transition-transform duration-500">
+                                <img src="{{ $imageUrl }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-500">
                                 <button class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white text-charcoal px-6 py-2 rounded-full text-xs font-medium opacity-0 group-hover/card:opacity-100 transition-all shadow-sm whitespace-nowrap hover:bg-clay hover:text-white">View Product</button>
                             </div>
                             <div class="flex justify-between items-start">
@@ -99,14 +99,14 @@
                     @foreach($products as $product)
                     <div class="w-72 flex-shrink-0">
                         <a href="{{ route('product.detail', $product->slug) }}" class="block">
-                            <div class="aspect-square bg-sand rounded-xl overflow-hidden mb-6 relative group/card">
+                            <div class="aspect-square bg-sand rounded-md overflow-hidden mb-6 relative group/card">
                                 @php
                                     $image = $product->primaryImage->image_url ?? ($product->images->first()->image_url ?? null);
                                     $imageUrl = $image && Storage::disk('public')->exists($image) 
                                         ? asset('storage/' . $image) 
                                         : asset('assets/images/prod_tshirt.png');
                                 @endphp
-                                <img src="{{ $imageUrl }}" alt="{{ $product->name }}" class="w-full h-full object-contain p-8 group-hover/card:scale-105 transition-transform duration-500">
+                                <img src="{{ $imageUrl }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-500">
                                 <button class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white text-charcoal px-6 py-2 rounded-full text-xs font-medium opacity-0 group-hover/card:opacity-100 transition-all shadow-sm whitespace-nowrap hover:bg-clay hover:text-white">View Product</button>
                             </div>
                             <div class="flex justify-between items-start">
@@ -124,7 +124,7 @@
         </div>
         
         <div class="text-center mt-20">
-            <a href="#" class="inline-block border-b border-charcoal text-xs font-semibold tracking-widest uppercase pb-1 hover:text-clay hover:border-clay transition-all">View All Essentials</a>
+            <a href="{{ route('dashboard') }}" class="inline-block border-b border-charcoal text-xs font-semibold tracking-widest uppercase pb-1 hover:text-clay hover:border-clay transition-all">View All Essentials</a>
         </div>
     </section>
 
