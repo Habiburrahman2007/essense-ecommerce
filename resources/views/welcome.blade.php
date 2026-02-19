@@ -75,7 +75,7 @@
                             <div class="aspect-square bg-sand rounded-xl overflow-hidden mb-6 relative group/card">
                                 @php
                                     $image = $product->primaryImage->image_url ?? ($product->images->first()->image_url ?? null);
-                                    $imageUrl = $image && Storage::exists('public/' . $image) 
+                                    $imageUrl = $image && Storage::disk('public')->exists($image) 
                                         ? asset('storage/' . $image) 
                                         : asset('assets/images/prod_tshirt.png');
                                 @endphp
@@ -102,7 +102,7 @@
                             <div class="aspect-square bg-sand rounded-xl overflow-hidden mb-6 relative group/card">
                                 @php
                                     $image = $product->primaryImage->image_url ?? ($product->images->first()->image_url ?? null);
-                                    $imageUrl = $image && Storage::exists('public/' . $image) 
+                                    $imageUrl = $image && Storage::disk('public')->exists($image) 
                                         ? asset('storage/' . $image) 
                                         : asset('assets/images/prod_tshirt.png');
                                 @endphp
