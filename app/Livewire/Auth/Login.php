@@ -36,4 +36,10 @@ class Login extends Component
 
         return redirect()->intended(route('dashboard'));
     }
+
+    public function loginWithGoogle()
+{
+    // Kamu bisa tambahkan logic di sini sebelum redirect
+    return redirect()->to('/auth/google');
+}
 }
