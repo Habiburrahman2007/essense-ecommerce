@@ -44,6 +44,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandName('Essence')
             ->brandLogo(asset('assets/images/logo.png'))
             ->brandLogoHeight('3rem') // Optional height adjustment
+            ->favicon(asset('assets/images/logo.png'))
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
