@@ -84,14 +84,21 @@
 
             <!-- Sidebar Footer / Logout -->
             <div class="p-4 border-t border-taupe/20">
-                <form action="{{ route('logout') }}" method="POST">
+                <!-- Logout trigger button - dispatch event ke modal -->
+                <button
+                    type="button"
+                    @click="$dispatch('open-logout-modal')"
+                    class="w-full flex items-center space-x-4 px-4 py-3 rounded-2xl text-red-400 hover:bg-red-50 transition-all overflow-hidden"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    <span x-show="sidebarOpen" x-transition>Sign Out</span>
+                </button>
+
+                <!-- Hidden form untuk POST logout -->
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
                     @csrf
-                    <button type="submit" class="w-full flex items-center space-x-4 px-4 py-3 rounded-2xl text-red-400 hover:bg-red-50 transition-all overflow-hidden">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                        </svg>
-                        <span x-show="sidebarOpen" x-transition>Sign Out</span>
-                    </button>
                 </form>
             </div>
             
@@ -147,5 +154,73 @@
     </div>
 
     @stack('scripts')
+
+    <!-- Logout Confirmation Modal -->
+    <!-- x-data sendiri agar bisa berada di luar div scope utama -->
+    <div
+        x-data="{ open: false }"
+        x-on:open-logout-modal.window="open = true"
+        x-show="open"
+        x-cloak
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        class="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+        @keydown.escape.window="open = false"
+    >
+        <!-- Backdrop -->
+        <div
+            class="absolute inset-0 bg-charcoal/40 backdrop-blur-sm"
+            @click="open = false"
+        ></div>
+
+        <!-- Modal Card -->
+        <div
+            x-show="open"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 scale-95 translate-y-4"
+            x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+            x-transition:leave-end="opacity-0 scale-95 translate-y-4"
+            class="relative bg-cream rounded-3xl shadow-2xl border border-taupe/30 w-full max-w-sm p-8 flex flex-col items-center text-center"
+        >
+            <!-- Icon -->
+            <div class="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center mb-5">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+            </div>
+
+            <!-- Title -->
+            <h2 class="text-xl font-serif text-charcoal mb-2">Sign Out?</h2>
+
+            <!-- Message -->
+            <p class="text-sm text-charcoal/60 leading-relaxed mb-8">
+                Apakah kamu yakin ingin keluar dari akun ini?
+            </p>
+
+            <!-- Buttons -->
+            <div class="flex gap-3 w-full">
+                <button
+                    type="button"
+                    @click="open = false"
+                    class="flex-1 px-5 py-2.5 rounded-full border border-taupe text-charcoal text-sm font-medium hover:bg-sand transition-all"
+                >
+                    Batal
+                </button>
+                <button
+                    type="button"
+                    @click="document.getElementById('logout-form').submit()"
+                    class="flex-1 px-5 py-2.5 rounded-full bg-red-400 text-white text-sm font-medium hover:bg-red-500 transition-all"
+                >
+                    Ya, Sign Out
+                </button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
