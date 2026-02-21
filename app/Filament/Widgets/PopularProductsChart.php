@@ -10,6 +10,7 @@ class PopularProductsChart extends ChartWidget
 {
     protected ?string $heading = 'Best Selling Products';
     protected static ?int $sort = 2;
+    protected int | string | array $columnSpan = 1;
 
     protected function getData(): array
     {
