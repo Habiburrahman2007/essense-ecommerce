@@ -189,34 +189,32 @@ class Cart extends Component
             return;
         }
 
-        // 7. Configure Midtrans
-        \Midtrans\Config::$serverKey = config('midtrans.server_key');
-        \Midtrans\Config::$isProduction = config('midtrans.is_production');
-        \Midtrans\Config::$isSanitized = config('midtrans.is_sanitized');
-        \Midtrans\Config::$is3ds = config('midtrans.is_3ds');
-
-        // 8. Create Transaction Params
-        $params = [
-            'transaction_details' => [
-                'order_id' => $orderId,
-                'gross_amount' => $total,
-            ],
-            'item_details' => $itemsDetails,
-            'customer_details' => [
-                'first_name' => Auth::user()->name,
-                'email' => Auth::user()->email,
-            ],
-            'callbacks' => [
-                'finish' => route('midtrans.finish') . '?order_id=' . $orderId,
-            ]
-        ];
+        // 7. Configure Xendit
+        \Xendit\Configuration::setXenditKey(config('xendit.secret_key') ?? env('XENDIT_SECRET_KEY'));
 
         try {
-            // 9. Get Snap Token
-            $snapToken = \Midtrans\Snap::getSnapToken($params);
+            $apiInstance = new \Xendit\Invoice\InvoiceApi();
+            $createInvoiceRequest = new \Xendit\Invoice\CreateInvoiceRequest([
+                'external_id' => $orderId,
+                'description' => 'Payment for Order ' . $orderId,
+                'amount' => $total,
+                'payer_email' => Auth::user()->email,
+                'success_redirect_url' => route('payment.success', ['orderId' => $orderId]),
+                'failure_redirect_url' => route('payment.failed', ['orderId' => $orderId]),
+                'items' => array_map(function ($item) {
+                    return [
+                        'name' => $item['name'],
+                        'quantity' => $item['quantity'],
+                        'price' => $item['price'],
+                    ];
+                }, $itemsDetails)
+            ]);
+
+            // 8. Create Invoice
+            $result = $apiInstance->createInvoice($createInvoiceRequest);
             
-            // 10. Dispatch event to frontend
-            $this->dispatch('show-snap-modal', token: $snapToken);
+            // 9. Redirect to Xendit Invoice URL
+            return redirect()->away($result['invoice_url']);
 
         } catch (\Exception $e) {
             // Delete the order if payment setup fails

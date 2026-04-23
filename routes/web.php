@@ -42,3 +42,6 @@ Route::middleware('auth')->group(function () {
 // Midtrans Callback Routes (tidak perlu auth)
 Route::post('/midtrans/callback', [App\Http\Controllers\MidtransCallbackController::class, 'handle'])->name('midtrans.callback');
 Route::get('/midtrans/finish', [App\Http\Controllers\MidtransCallbackController::class, 'finish'])->name('midtrans.finish');
+
+// Xendit Webhook
+Route::post('/xendit/webhook', [App\Http\Controllers\XenditWebhookController::class, 'handle'])->name('xendit.webhook');
